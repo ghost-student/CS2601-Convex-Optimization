@@ -1,0 +1,34 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+plt.rc('text', usetex=True)
+plt.rc('font', family='serif')
+
+
+def plot_traces_2d(f_2d, x_traces, filename):
+    fig = plt.figure()
+    plt.plot(*zip(*x_traces), '-o', color='red')
+
+    x1, x2 = zip(*x_traces)
+    x1 = np.arange(min(x1)-.2, max(x1)+.2, 0.01)
+    x2 = np.arange(min(x2)-.2, max(x2)+.2, 0.01)
+    x1, x2 = np.meshgrid(x1, x2)
+
+    plt.contour(x1, x2, f_2d(x1, x2), 20, colors='blue')
+    plt.xlabel('$x_1$')
+    plt.ylabel('$x_2$')
+    fig.savefig(filename)
+
+
+def plot(f, x_traces, filename, logscale=True):
+    fig = plt.figure()
+    f_traces = [f(x) for x in x_traces]
+
+    if logscale:
+        plt.semilogy(f_traces)
+    else:
+        plt.plot(f_traces)
+
+    plt.xlabel('iteration ($k$)')
+    plt.ylabel('error $f(x_k) - f(x^*)$')
+    fig.savefig(filename)
